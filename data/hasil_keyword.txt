@@ -1,0 +1,10 @@
+indonesia : 237
+iran : 93
+cnn : 83
+detiknews : 78
+kompascom : 77
+as : 67
+jadi : 56
+cnbc : 54
+rp : 48
+hingga : 47

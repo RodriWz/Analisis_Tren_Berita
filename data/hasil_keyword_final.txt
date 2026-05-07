@@ -1,0 +1,10 @@
+iran : 98
+kompas : 86
+trump : 46
+harga : 41
+soal : 39
+baru : 37
+usai : 37
+tahun : 35
+kasus : 35
+hari : 34
