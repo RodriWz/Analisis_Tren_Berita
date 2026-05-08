@@ -24,6 +24,7 @@ def get_rss():
                 })
 
         except Exception as e:
-            print("Error:", url, e)
+            print("Error di:", url)
+            print(e)
 
     return news
