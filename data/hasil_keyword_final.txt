@@ -1,10 +1,10 @@
-iran : 98
-kompas : 86
-trump : 46
-harga : 41
-soal : 39
-baru : 37
-usai : 37
-tahun : 35
-kasus : 35
-hari : 34
+trump:46
+harga:41
+kasus:35
+selat:32
+hormuz:32
+galaxy:32
+april:31
+israel:30
+detiksport:28
+dalam:27
