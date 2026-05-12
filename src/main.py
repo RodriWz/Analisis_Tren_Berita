@@ -12,8 +12,8 @@ def run_job(continuous=True):
         print("Total diambil dari RSS:", len(data))
 
         inserted = save_data(data)
-        print("✔ Data baru disimpan:", inserted)
-        print("⚠ Duplikat (diabaikan):", len(data) - inserted)
+        print("DONE Data baru disimpan:", inserted)
+        print("SKIP Duplikat (diabaikan):", len(data) - inserted)
 
         if not continuous:
             print("=" * 50)
