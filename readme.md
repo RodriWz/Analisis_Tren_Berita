@@ -1,37 +1,40 @@
-# 📰 News Big Data Pipeline (RSS Scraping & Analysis)
+# 📰 Analisis Berita Indonesia: Sentimen & Tren Topik Berbasis Big Data
 
 ## 📌 Deskripsi
 
-Project ini merupakan implementasi sederhana konsep **Big Data Pipeline** yang mencakup proses:
+Project ini merupakan implementasi **Big Data Pipeline** untuk menganalisis berita Indonesia yang diambil dari NewsAPI. Pipeline mencakup proses:
 
-* Data Ingestion (pengambilan data)
-* Data Storage (penyimpanan)
-* Data Preprocessing (pembersihan data)
-* Data Analysis (analisis data)
-* Data Visualization (visualisasi)
-
-Data yang digunakan berasal dari berbagai sumber berita melalui RSS feed.
+- **Data Ingestion** — Pengambilan data berita via NewsAPI
+- **Data Storage** — Penyimpanan ke database SQLite
+- **Data Preprocessing** — Pembersihan teks (HTML cleaning, stopword removal, stemming)
+- **Data Analysis** — Analisis sentimen & topic modeling (LDA)
+- **Data Visualization** — Visualisasi insight dari data berita
 
 ---
 
-## 🧠 Tujuan Project
+## 🎯 Tujuan Project
 
-* Mengambil data berita dari berbagai sumber
-* Menyimpan data ke database
-* Membersihkan data teks
-* Menganalisis tren keyword berita
-* Menampilkan insight dari data
+- Mengambil data berita berbahasa Indonesia dari NewsAPI
+- Menyimpan data ke database secara terstruktur
+- Membersihkan dan memproses teks berita
+- Mengklasifikasikan berita berdasarkan sentimen (positif / negatif / netral)
+- Menemukan topik dominan dari keseluruhan berita menggunakan LDA
+- Menampilkan insight bisnis dari data berita Indonesia
 
 ---
 
 ## ⚙️ Teknologi yang Digunakan
 
-* Python
-* SQLite
-* Jupyter Notebook
-* Pandas
-* Matplotlib
-* Feedparser
+| Kategori | Library / Tools |
+|---|---|
+| Bahasa | Python |
+| Database | SQLite |
+| Notebook | Jupyter Notebook |
+| Manipulasi Data | Pandas |
+| Pembersihan Teks | BeautifulSoup4, NLTK, Sastrawi |
+| Analisis Sentimen | NLTK / IndoNLU |
+| Topic Modeling | Gensim (LDA) |
+| Visualisasi | Matplotlib, WordCloud |
 
 ---
 
@@ -40,22 +43,26 @@ Data yang digunakan berasal dari berbagai sumber berita melalui RSS feed.
 ```
 big-data/
 │
-├── src/                # Core logic program
-│   ├── main.py         # Entry point
-│   ├── rss.py          # Scraping RSS
-│   ├── db.py           # Database handler
-│   └── utils.py        # Helper functions
+├── src/                        # Core logic program
+│   ├── main.py                 # Entry point scraping
+│   ├── rss.py                  # Scraping NewsAPI
+│   ├── db.py                   # Database handler
+│   └── utils.py                # Helper functions
 │
-├── config/             # Konfigurasi
-│   └── settings.py     # RSS URL & DB path
+├── config/                     # Konfigurasi
+│   └── settings.py             # API Key, DB path, parameter
 │
-├── data/               # Penyimpanan data
-│   └── news.db         # Database SQLite
+├── data/                       # Penyimpanan data
+│   ├── news.db                 # Database SQLite (raw)
+│   └── news_bersih.csv         # Data hasil preprocessing
 │
-├── notebooks/          # Analisis data
-│   └── analysis.ipynb  # Cleaning & visualisasi
+├── notebooks/                  # Analisis data
+│   ├── 01_eksplorasi.ipynb     # Eksplorasi & EDA
+│   ├── 02_preprocessing.ipynb  # Cleaning & preprocessing teks
+│   ├── 03_sentimen.ipynb       # Analisis sentimen
+│   └── 04_topik_visualisasi.ipynb  # Topic modeling & visualisasi
 │
-├── venv/               # Virtual environment
+├── venv/                       # Virtual environment
 │
 └── README.md
 ```
@@ -65,19 +72,28 @@ big-data/
 ## 🔄 Alur Sistem
 
 ```
-RSS Feed
-   ↓
-Scraping (rss.py)
-   ↓
-Processing Data
-   ↓
-Database (SQLite)
-   ↓
-Jupyter Notebook
-   ↓
-Cleaning & Analysis
-   ↓
-Visualization & Insight
+NewsAPI (lang=id)
+       ↓
+  Scraping Data
+       ↓
+  Simpan ke SQLite
+       ↓
+  Jupyter Notebook
+       ↓
+  ┌────────────────────┐
+  │   Preprocessing    │
+  │ - Bersihkan HTML   │
+  │ - Hapus stopword   │
+  │ - Stemming         │
+  └────────────────────┘
+       ↓
+  ┌─────────────────────────────────────┐
+  │            Analisis                 │
+  │  Sentimen          Topic Modeling   │
+  │ (pos/neg/netral)      (LDA)         │
+  └─────────────────────────────────────┘
+       ↓
+  Visualisasi & Insight
 ```
 
 ---
@@ -86,80 +102,81 @@ Visualization & Insight
 
 ### 1. Buat Virtual Environment
 
-```
+```bash
 py -m venv venv
 ```
 
 ### 2. Aktifkan Venv
 
-* PowerShell:
-
-```
+PowerShell:
+```bash
 .\venv\Scripts\activate
 ```
 
-* Git Bash:
-
-```
+Git Bash:
+```bash
 source venv/Scripts/activate
 ```
 
----
-
 ### 3. Install Dependency
 
+```bash
+pip install pandas matplotlib beautifulsoup4 nltk sastrawi gensim wordcloud jupyter ipykernel
 ```
-pip install pandas matplotlib feedparser jupyter ipykernel
-```
-
----
 
 ### 4. Jalankan Scraping
 
-```
+```bash
 py -m src.main
 ```
 
----
-
 ### 5. Jalankan Jupyter Notebook
 
-```
+```bash
 jupyter notebook
 ```
 
-Pilih kernel:
-
-```
-Python (bigdata-venv)
-```
-
 ---
 
-## 🧹 Data Cleaning
+## 🧹 Preprocessing
 
-Dilakukan di Jupyter Notebook dengan tahap:
+Dilakukan di `02_preprocessing.ipynb` dengan tahap:
 
-* Lowercase
-* Menghapus simbol & angka
-* Stopword removal
-* Filtering kata penting
+1. **HTML Cleaning** — Hapus tag HTML dari kolom description
+2. **Lowercase** — Ubah semua teks ke huruf kecil
+3. **Hapus simbol & angka** — Bersihkan karakter tidak relevan
+4. **Stopword Removal** — Hapus kata umum bahasa Indonesia
+5. **Stemming** — Ubah kata ke bentuk dasar (Sastrawi)
 
 ---
 
 ## 📊 Analisis Data
 
-* Menghitung frekuensi kata (keyword)
-* Menentukan topik dominan
-* Visualisasi menggunakan bar chart
+### Analisis Sentimen
+- Mengklasifikasikan setiap berita menjadi: **Positif**, **Negatif**, atau **Netral**
+- Melihat distribusi sentimen per topik dan per waktu
+
+### Topic Modeling (LDA)
+- Menemukan topik dominan dari 1705 berita
+- Mengidentifikasi kata kunci utama tiap topik
+- Melihat tren topik dari waktu ke waktu
+
+---
+
+## 📈 Visualisasi
+
+- Bar chart distribusi sentimen
+- Line chart tren berita per hari
+- Word cloud kata dominan
+- Grafik topik dominan per kategori
 
 ---
 
 ## 💡 Insight
 
-Contoh insight:
+Contoh insight yang dihasilkan:
 
-> Topik berita didominasi oleh isu geopolitik dan ekonomi berdasarkan frekuensi kata yang muncul.
+> Berita Indonesia didominasi oleh topik **ekonomi dan geopolitik** dengan sentimen cenderung **negatif**, mencerminkan kekhawatiran publik terhadap isu harga dan keamanan.
 
 ---
 
@@ -167,37 +184,36 @@ Contoh insight:
 
 Tabel: `news`
 
-| Kolom       | Tipe    | Keterangan     |
-| ----------- | ------- | -------------- |
-| id          | INTEGER | Primary key    |
-| title       | TEXT    | Judul berita   |
-| source      | TEXT    | Sumber berita  |
-| link        | TEXT    | URL (unik)     |
-| tanggal     | TEXT    | Tanggal berita |
-| description | TEXT    | Ringkasan      |
-| guid        | TEXT    | ID dari RSS    |
+| Kolom | Tipe | Keterangan |
+|---|---|---|
+| id | INTEGER | Primary key |
+| title | TEXT | Judul berita |
+| source | TEXT | Sumber media |
+| link | TEXT | URL berita |
+| tanggal | TEXT | Tanggal publikasi |
+| description | TEXT | Ringkasan (format HTML) |
+| guid | TEXT | ID unik dari NewsAPI |
 
 ---
 
 ## ⚠️ Catatan
 
-* Data masih dalam skala kecil (simulasi Big Data)
-* Sistem dapat dikembangkan untuk skala lebih besar
-* Beberapa sumber RSS mungkin memblok request
+- Data berjumlah **1705 berita** berbahasa Indonesia dari NewsAPI
+- Sumber berita mencakup media Indonesia dan berita internasional berbahasa Indonesia
+- Preprocessing menggunakan library khusus bahasa Indonesia (Sastrawi)
 
 ---
 
 ## 🔮 Pengembangan Selanjutnya
 
-* Menggunakan Apache Spark untuk data besar
-* Menambahkan dashboard (Power BI / Streamlit)
-* Analisis sentimen
-* Real-time data pipeline
+- Real-time pipeline menggunakan Apache Kafka
+- Dashboard interaktif dengan Streamlit
+- Analisis sentimen berbasis model IndoBERT
+- Skalabilitas menggunakan Apache Spark
 
 ---
 
 ## 👨‍💻 Author
 
-Project ini dibuat untuk keperluan pembelajaran Big Data.
-
----
+**Rohdrigues Lytonio**  
+Project ini dibuat untuk keperluan tugas mata kuliah Big Data.
